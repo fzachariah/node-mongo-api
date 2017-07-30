@@ -28,6 +28,19 @@ app.post('/todos',function(req,res){
 
 });
 
+app.get('/todos',function(req,res){
+
+    Todo.find().then((todos) =>{
+
+        res.send({todos});
+    },(e) =>{
+        res.status(400).send(e);
+
+    });
+});
+
+
+
 
 
 app.listen(port,function(){
@@ -35,3 +48,5 @@ app.listen(port,function(){
     console.log('Server is Up at Port No: '+port);
 
 });
+
+module.exports={app};
