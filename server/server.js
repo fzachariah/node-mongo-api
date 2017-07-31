@@ -109,7 +109,7 @@ app.patch('/todos/:id',function(req,res){
         body.completed=false;
         body.completedAt=null;
     }
-    
+
     Todo.findByIdAndUpdate(id,{$set: body},{new:true}).then((todo) =>{
 
         if(!todo)
@@ -123,11 +123,23 @@ app.patch('/todos/:id',function(req,res){
         res.status(400).send();
     })
 
-
-})
-
+});
 
 
+app.post('/users',function(req,res){
+
+    var body=_.pick(req.body,['email','password']);
+    var user=new User(body);
+
+    user.save().then(() =>{  
+        return user.generateAuthToken();
+    }).then((token) =>{
+        res.header('x-auth',token).send(user);
+    }).catch((e) =>{
+        res.status(400).send(e);
+    })
+
+});
 
 app.listen(port,function(){
 
@@ -135,4 +147,3 @@ app.listen(port,function(){
 
 });
 
-module.exports={app};
